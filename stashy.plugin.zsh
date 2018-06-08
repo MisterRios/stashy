@@ -33,3 +33,4 @@ function stashy() {
   fi
 }
 
+alias sta="stashy"
