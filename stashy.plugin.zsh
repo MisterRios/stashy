@@ -24,6 +24,11 @@ function stashy() {
     git stash clear
   elif [[ "$command" == "all" ]]; then
     git stash --include-untracked
+  elif [[ "$command" == "staged" ]]; then
+    local files=$(git diff --name-only --cached)
+    if [[ $files ]]; then
+      git stash push $files
+    fi
   elif [[ "$command" == "patch" ]]; then
     git stash --patch
   elif ! [[ "$command" ]]; then
