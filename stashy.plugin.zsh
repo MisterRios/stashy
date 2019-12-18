@@ -15,7 +15,15 @@ function stashy() {
   elif [[ "$command" == "unstaged" ]]; then
     git stash --keep-index
   elif [[ "$command" == "pop" ]]; then
-    git stash pop stash@{$parameter} 
+    if [[ $parameter =~ ^[0-9]+$ ]]; then
+      git stash pop stash@{$parameter}
+    else
+      local results=$(git stash list --grep "On.*$parameter" --all-match)
+      local index=$(sed 's/.*{\([0-9]\)}.*/\1/' <<< "$results")
+      echo $results
+      echo "popped $index stash"
+      git stash pop stash@{$index}
+    fi
   elif [[ "$command" == "apply" ]]; then
     git stash apply stash@{$parameter} 
   elif [[ "$command" == "drop" ]]; then
